@@ -19,12 +19,22 @@ resource "aws_instance" "my_webserver" {
 resource "aws_security_group" "my_webserver_linux_sg" {
   name = "my_webserver_linux_sg"
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
+  dynamic "ingress" {
+    for_each = ["80", "443", "8080"]
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = [ "0.0.0.0/0" ]
+    }
   }
+
+  ingress {
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+      cidr_blocks = [ "77.93.44.206/32" ]
+    }
 
   egress {
     from_port   = 0
