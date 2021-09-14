@@ -6,14 +6,23 @@ resource "aws_instance" "my_webserver" {
     instance_type          = "t2.micro"
     ami                    = "ami-07df274a488ca9195"
     user_data              = templatefile("user_data.tpl", {
-      instance_name = "MyWebserver"
+      instance_name = "MyWebserver",
+      author      =   "MiceOnMars"
     })
 
     vpc_security_group_ids = [ aws_security_group.my_webserver_linux_sg.id ]
 
+    lifecycle {
+      create_before_destroy = true
+    }
+
     tags = {
       "Name" = "MyWebserver"
     }
+}
+
+resource "aws_eip" "my_webserver_eip" {
+  instance = aws_instance.my_webserver.id
 }
 
 resource "aws_security_group" "my_webserver_linux_sg" {
