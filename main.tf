@@ -7,7 +7,7 @@ resource "aws_instance" "my_webserver" {
     ami                    = "ami-07df274a488ca9195"
     user_data              = templatefile("user_data.tpl", {
       instance_name = "MyWebserver",
-      author      =   "MiceOnMars"
+      author        =   "MiceOnMars"
     })
 
     vpc_security_group_ids = [ aws_security_group.my_webserver_linux_sg.id ]
