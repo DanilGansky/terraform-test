@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_instance" "my_webserver" {
     instance_type          = "t2.micro"
     ami                    = "ami-07df274a488ca9195"
-    user_data              = templatefile("user_data.sh", {
+    user_data              = templatefile("user_data.tpl", {
       instance_name = "MyWebserver"
     })
 
