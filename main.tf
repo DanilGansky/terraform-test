@@ -3,22 +3,37 @@ provider "aws" {
 }
 
 resource "aws_instance" "my_webserver" {
-    instance_type          = "t2.micro"
-    ami                    = "ami-07df274a488ca9195"
-    user_data              = templatefile("user_data.tpl", {
-      instance_name = "MyWebserver",
-      author        =   "MiceOnMars"
-    })
+  instance_type = "t2.micro"
+  ami           = "ami-07df274a488ca9195"
 
-    vpc_security_group_ids = [ aws_security_group.my_webserver_linux_sg.id ]
+  user_data = templatefile("user_data.tpl", {
+    instance_name = "MyWebserver",
+    author        = "MiceOnMars"
+  })
 
-    lifecycle {
-      create_before_destroy = true
-    }
+  vpc_security_group_ids = [aws_security_group.my_webserver_linux_sg.id]
+  depends_on             = [aws_instance.my_webserver_db]
 
-    tags = {
-      "Name" = "MyWebserver"
-    }
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    "Name" = "MyWebserver"
+  }
+}
+
+resource "aws_instance" "my_webserver_db" {
+  instance_type = "t2.micro"
+  ami           = "ami-07df274a488ca9195"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
+  tags = {
+    "Name" = "MyWebserverDB"
+  }
 }
 
 resource "aws_eip" "my_webserver_eip" {
@@ -30,25 +45,26 @@ resource "aws_security_group" "my_webserver_linux_sg" {
 
   dynamic "ingress" {
     for_each = ["80", "443", "8080"]
+
     content {
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
-      cidr_blocks = [ "0.0.0.0/0" ]
+      cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
   ingress {
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = [ "77.93.44.206/32" ]
-    }
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["77.93.44.206/32"]
+  }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [ "0.0.0.0/0" ]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
