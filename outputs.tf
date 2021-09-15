@@ -1,3 +1,5 @@
+data "aws_region" "current" {}
+
 output "my_webserver_webserver_instance_id" {
   value = aws_instance.my_webserver.id
 }
@@ -12,4 +14,12 @@ output "my_webserver_sg_id" {
 
 output "my_webserver_public_ip" {
   value = aws_eip.my_webserver_eip.public_ip
+}
+
+output "data_current_region_name" {
+  value = data.aws_region.current.name
+}
+
+output "data_current_region_description" {
+  value = data.aws_region.current.description
 }
