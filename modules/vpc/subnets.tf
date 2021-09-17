@@ -1,64 +1,43 @@
 # Public Subnets
 resource "aws_subnet" "webserver_public_subnet_a" {
-  cidr_block              = "10.0.11.0/24"
+  cidr_block              = var.public_subnet_a_cidr_block
   vpc_id                  = aws_vpc.webserver_vpc.id
   availability_zone_id    = data.aws_availability_zones.available[0]
   map_public_ip_on_launch = true
 
-  tags = {
+  tags = merge(module.variables.common_tags, {
     Name = "webserver-public-subnet-a"
-  }
+  })
 }
 
 resource "aws_subnet" "webserver_public_subnet_b" {
-  cidr_block              = "10.0.21.0/24"
+  cidr_block              = var.public_subnet_b_cidr_block
   vpc_id                  = aws_vpc.webserver_vpc.id
   availability_zone_id    = data.aws_availability_zones.available[1]
   map_public_ip_on_launch = true
 
-  tags = {
+  tags = merge(module.variables.common_tags, {
     Name = "webserver-public-subnet-b"
-  }
+  })
 }
 
 # Private Subnets
 resource "aws_subnet" "webserver_private_subnet_a" {
-  cidr_block           = "10.0.12.0/24"
+  cidr_block           = var.private_subnet_a_cidr_block
   vpc_id               = aws_vpc.webserver_vpc.id
   availability_zone_id = data.aws_availability_zones.available[0]
 
-  tags = {
+  tags = merge(module.variables.common_tags, {
     Name = "webserver-private-subnet-a"
-  }
+  })
 }
 
 resource "aws_subnet" "webserver_private_subnet_b" {
-  cidr_block           = "10.0.22.0/24"
+  cidr_block           = var.private_subnet_b_cidr_block
   vpc_id               = aws_vpc.webserver_vpc.id
   availability_zone_id = data.aws_availability_zones.available[1]
 
-  tags = {
+  tags = merge(module.variables.common_tags, {
     Name = "webserver-private-subnet-b"
-  }
-}
-
-# Database Subnets
-resource "aws_subnet" "webserver_db_subnet_a" {
-  cidr_block           = "10.0.13.0/24"
-  vpc_id               = aws_vpc.webserver_vpc.id
-  availability_zone_id = data.aws_availability_zones.available[0]
-
-  tags = {
-    Name = "webserver-db-subnet-a"
-  }
-}
-
-resource "aws_subnet" "webserver_db_subnet_b" {
-  cidr_block           = "10.0.23.0/24"
-  vpc_id               = aws_vpc.webserver_vpc.id
-  availability_zone_id = data.aws_availability_zones.available[1]
-
-  tags = {
-    Name = "webserver-db-subnet-b"
-  }
+  })
 }

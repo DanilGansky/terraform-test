@@ -1,9 +1,8 @@
 # VPC
 resource "aws_vpc" "webserver_vpc" {
-  cidr_block = "10.10.10.0/16"
+  cidr_block = var.vpc_cidr_block
 
-  tags = {
+  tags = merge(module.variables.common_tags, {
     Name = "webserver-vpc"
-    Type = "prod"
-  }
+  })
 }
