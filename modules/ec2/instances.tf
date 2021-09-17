@@ -1,9 +1,9 @@
 # WebServer EC2 Instances
 resource "aws_instance" "webserver" {
-  //todo: add key
   instance_type = var.instance_type
   ami           = data.aws_ami.latest_linux_ami
   subnet_id     = module.webserver_vpc.webserver_public_subnet_a_id
+  key_name      = aws_key_pair.webserver_key.key_name
 
   user_data = templatefile(var.template_name, var.template_data)
   tags      = merge(module.variables.common_tags, { Name = "webserver" })
