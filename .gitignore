@@ -1,6 +1,7 @@
 # Local .terraform directories
 **/.terraform/*
 *.pem
+*.pub
 *.hcl
 *.info
 *.tfstate*

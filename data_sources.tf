@@ -1,3 +1,10 @@
+# VPC
+# Availability zones
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+# EC2
 # Latest Amazon Linux AMI
 data "aws_ami" "latest_linux_ami" {
   owners      = ["amazon"]
