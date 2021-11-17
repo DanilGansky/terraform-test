@@ -1,0 +1,6 @@
+- name: Pingbook
+  hosts: servers
+  become: yes
+  tasks:
+    - name: Run ping
+      ping:

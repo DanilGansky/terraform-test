@@ -1,0 +1,22 @@
+- name: Install Apache
+  hosts: servers
+  become: yes
+
+  vars:
+    index_src: ./index.html
+    index_dst: /var/www/html
+
+  tasks:
+    - name: Install Apache
+      yum: name=httpd state=installed
+
+    - name: Copy index.html
+      copy: dest={{ index_dst }} src={{ index_src }}
+      notify: Restart Apache
+
+    - name: Start and enable Apache server
+      service: name=httpd state=started enabled=yes
+
+  handlers:
+    - name: Restart Apache
+      service: name=httpd state=restarted
